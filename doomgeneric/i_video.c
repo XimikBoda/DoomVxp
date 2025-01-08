@@ -195,7 +195,7 @@ void I_InitGraphics (void)
 
 #else  // CMAP256
 
-	s_Fb.bits_per_pixel = 32;
+	/*s_Fb.bits_per_pixel = 32;
 
 	s_Fb.blue.length = 8;
 	s_Fb.green.length = 8;
@@ -205,7 +205,19 @@ void I_InitGraphics (void)
 	s_Fb.blue.offset = 0;
 	s_Fb.green.offset = 8;
 	s_Fb.red.offset = 16;
-	s_Fb.transp.offset = 24;
+	s_Fb.transp.offset = 24;*/
+
+    s_Fb.bits_per_pixel = 16;
+
+    s_Fb.blue.length = 5;
+    s_Fb.green.length = 6;
+    s_Fb.red.length = 5;
+    s_Fb.transp.length = 0;
+
+    s_Fb.blue.offset = 0;
+    s_Fb.green.offset = 5;
+    s_Fb.red.offset = 11;
+    s_Fb.transp.offset = 0;
 	
 #endif  // CMAP256
 

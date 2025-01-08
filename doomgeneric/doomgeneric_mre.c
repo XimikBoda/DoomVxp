@@ -100,11 +100,11 @@ void handle_sysevt(VMINT message, VMINT param); // system events
 void DG_Init() {}
 void DG_DrawFrame() {
 	VMUINT16* layer_buf16 = (VMUINT16*)layer_buf;
+	VMUINT16* game_buf16 = (VMUINT16*)DG_ScreenBuffer;
 	for (int y = 0; y < DOOMGENERIC_RESY; ++y)
 		for (int x = 0; x < DOOMGENERIC_RESX; ++x) {
-			uint32_t c = DG_ScreenBuffer[y * DOOMGENERIC_RESX + x];
-			uint8_t* cc = (uint8_t*)&c;
-			layer_buf16[240 - 1 - y + (x) * 240] = VM_COLOR_888_TO_565(cc[2], cc[1], cc[0]);
+			VMUINT16 c = game_buf16[y * DOOMGENERIC_RESX + x];
+			layer_buf16[240 - 1 - y + (x) * 240] = c;
 		}
 	vm_graphic_flush_layer(layer_hdl, 1);
 }
