@@ -7,6 +7,8 @@
 #include "vmres.h"
 #include "vmtimer.h"
 
+#include "console.h"
+
 #include "doomgeneric.h"
 #include "doomkeys.h"
 
@@ -15,6 +17,8 @@ VMUINT8* layer_buf = 0;
 
 VMINT screen_w = 0;
 VMINT screen_h = 0;
+
+VMBOOL first_frame = 1;
 
 #define KEYQUEUE_SIZE 16
 
@@ -95,10 +99,17 @@ void handle_keyevt(VMINT event, VMINT keycode) {
 	addKeyToQueue(event != VM_KEY_EVENT_UP, keycode);
 }
 
-void handle_sysevt(VMINT message, VMINT param); // system events 
+void flush_layer() {
+	vm_graphic_flush_layer(layer_hdl, 1);
+}
 
 void DG_Init() {}
 void DG_DrawFrame() {
+	if (first_frame) {
+		console_init(DOOMGENERIC_RESY - screen_w, screen_h, layer_buf);
+		first_frame = 0;
+	}
+
 	VMUINT16* layer_buf16 = (VMUINT16*)layer_buf;
 	VMUINT16* game_buf16 = (VMUINT16*)DG_ScreenBuffer;
 	for (int y = 0; y < DOOMGENERIC_RESY; ++y)
@@ -106,7 +117,7 @@ void DG_DrawFrame() {
 			VMUINT16 c = game_buf16[y * DOOMGENERIC_RESX + x];
 			layer_buf16[240 - 1 - y + (x) * 240] = c;
 		}
-	vm_graphic_flush_layer(layer_hdl, 1);
+	flush_layer();
 }
 void DG_SleepMs(uint32_t ms) {}
 
@@ -126,12 +137,13 @@ void vm_main(void) {
 	screen_w = vm_graphic_get_screen_width();
 	screen_h = vm_graphic_get_screen_height();
 
-	//vm_reg_sysevt_callback(handle_sysevt);
 	vm_reg_keyboard_callback(handle_keyevt);
 
 	layer_hdl[0] = vm_graphic_create_layer(0, 0, screen_w, screen_h, -1);
 	layer_buf = vm_graphic_get_layer_buffer(layer_hdl[0]);
 	vm_graphic_set_clip(0, 0, screen_w, screen_h);
+
+	console_init(screen_w, screen_h, layer_buf);
 
 	vm_switch_power_saving_mode(turn_off_mode);
 	vm_kbd_set_mode(VM_KEYPAD_2KEY_NUMBER);

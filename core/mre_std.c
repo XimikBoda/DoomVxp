@@ -3,6 +3,7 @@
 #include <vmchset.h>
 #include <vmstdlib.h>
 
+#include "console.h"
 
 FILE* mre_fopen(char const* _FileName, char const* _Mode) {
 	VMCHAR wstr[260];
@@ -54,11 +55,26 @@ int mre_mkdir(char const* _Path) {
 	return 0;//vm_file_mkdir(wstr);
 }
 
-int mre_putchar(int _Character) {}
+int mre_putchar(int _Character) {
+	console_put_char(_Character);
+}
 
-int mre_puts(char const* _Buffer) {}
+int mre_puts(char const* _Buffer) {
+	console_put_str(_Buffer);
+}
 
-int mre_printf(char const* const _Format, ...) {}
+static char buf[1024];
+
+int mre_printf(char const* const format, ...) {
+	va_list aptr;
+
+	va_start(aptr, format);
+	int ret = vsprintf(buf, format, aptr);
+	va_end(aptr);
+
+	console_put_str(buf);
+	return ret;
+}
 
 int mre_fprintf(char const* const _Format, ...) {}
 

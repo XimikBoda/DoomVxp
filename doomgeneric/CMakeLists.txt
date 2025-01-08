@@ -186,4 +186,4 @@ add_library(${PROJECT_NAME} STATIC
     z_zone.h
 )
 
-target_link_libraries(${PROJECT_NAME} mreapi)
+target_link_libraries(${PROJECT_NAME} mreapi console)
