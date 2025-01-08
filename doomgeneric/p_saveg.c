@@ -82,11 +82,11 @@ static byte saveg_read8(void)
 {
     byte result;
 
-    if (fread(&result, 1, 1, save_stream) < 1)
+    if (mre_fread(&result, 1, 1, save_stream) < 1)
     {
         if (!savegame_error)
         {
-            fprintf(stderr, "saveg_read8: Unexpected end of file while "
+            mre_fprintf(stderr, "saveg_read8: Unexpected end of file while "
                             "reading save game\n");
 
             savegame_error = true;
@@ -98,11 +98,11 @@ static byte saveg_read8(void)
 
 static void saveg_write8(byte value)
 {
-    if (fwrite(&value, 1, 1, save_stream) < 1)
+    if (mre_fwrite(&value, 1, 1, save_stream) < 1)
     {
         if (!savegame_error)
         {
-            fprintf(stderr, "saveg_write8: Error while writing save game\n");
+            mre_fprintf(stderr, "saveg_write8: Error while writing save game\n");
 
             savegame_error = true;
         }
@@ -153,7 +153,7 @@ static void saveg_read_pad(void)
     int padding;
     int i;
 
-    pos = ftell(save_stream);
+    pos = mre_ftell(save_stream);
 
     padding = (4 - (pos & 3)) & 3;
 
@@ -169,7 +169,7 @@ static void saveg_write_pad(void)
     int padding;
     int i;
 
-    pos = ftell(save_stream);
+    pos = mre_ftell(save_stream);
 
     padding = (4 - (pos & 3)) & 3;
 

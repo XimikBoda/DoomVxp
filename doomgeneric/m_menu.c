@@ -510,15 +510,15 @@ void M_ReadSaveStrings(void)
     {
         M_StringCopy(name, P_SaveGameFile(i), sizeof(name));
 
-	handle = fopen(name, "rb");
+	handle = mre_fopen(name, "rb");
         if (handle == NULL)
         {
             M_StringCopy(savegamestrings[i], EMPTYSTRING, SAVESTRINGSIZE);
             LoadMenu[i].status = 0;
             continue;
         }
-	fread(&savegamestrings[i], 1, SAVESTRINGSIZE, handle);
-	fclose(handle);
+	mre_fread(&savegamestrings[i], 1, SAVESTRINGSIZE, handle);
+	mre_fclose(handle);
 	LoadMenu[i].status = 1;
     }
 }
@@ -967,7 +967,7 @@ void M_Episode(int choice)
     if ( (gamemode == registered)
 	 && (choice > 2))
     {
-      fprintf( stderr,
+      mre_fprintf( stderr,
 	       "M_Episode: 4th episode requires UltimateDOOM\n");
       choice = 0;
     }

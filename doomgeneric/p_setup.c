@@ -691,7 +691,7 @@ static void PadRejectArray(byte *array, unsigned int len)
 
     if (len > sizeof(rejectpad))
     {
-        fprintf(stderr, "PadRejectArray: REJECT lump too short to pad! (%i > %i)\n",
+        mre_fprintf(stderr, "PadRejectArray: REJECT lump too short to pad! (%i > %i)\n",
                         len, (int) sizeof(rejectpad));
 
         // Pad remaining space with 0 (or 0xff, if specified on command line).
@@ -835,7 +835,7 @@ P_SetupLevel
     if (precache)
 	R_PrecacheLevel ();
 
-    //printf ("free memory: 0x%x\n", Z_FreeMemory());
+    //mre_printf ("free memory: 0x%x\n", Z_FreeMemory());
 
 }
 

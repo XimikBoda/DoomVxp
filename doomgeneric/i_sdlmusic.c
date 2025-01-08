@@ -206,17 +206,17 @@ static void ParseVorbisComments(file_metadata_t *metadata, FILE *fs)
     }
 
     // Skip the starting part we don't care about.
-    if (fread(&buf, 4, 1, fs) < 1)
+    if (mre_fread(&buf, 4, 1, fs) < 1)
     {
         return;
     }
-    if (fseek(fs, LONG(buf), SEEK_CUR) != 0)
+    if (mre_fseek(fs, LONG(buf), SEEK_CUR) != 0)
     {
 	return;
     }
 
     // Read count field for number of comments.
-    if (fread(&buf, 4, 1, fs) < 1)
+    if (mre_fread(&buf, 4, 1, fs) < 1)
     {
         return;
     }
@@ -226,7 +226,7 @@ static void ParseVorbisComments(file_metadata_t *metadata, FILE *fs)
     for (i = 0; i < num_comments; ++i)
     {
         // Read length of comment.
-        if (fread(&buf, 4, 1, fs) < 1)
+        if (mre_fread(&buf, 4, 1, fs) < 1)
 	{
             return;
 	}
@@ -236,7 +236,7 @@ static void ParseVorbisComments(file_metadata_t *metadata, FILE *fs)
         // Read actual comment data into string buffer.
         comment = calloc(1, comment_len + 1);
         if (comment == NULL
-         || fread(comment, 1, comment_len, fs) < comment_len)
+         || mre_fread(comment, 1, comment_len, fs) < comment_len)
         {
             free(comment);
             break;
@@ -253,7 +253,7 @@ static void ParseFlacStreaminfo(file_metadata_t *metadata, FILE *fs)
     byte buf[34];
 
     // Read block data.
-    if (fread(buf, sizeof(buf), 1, fs) < 1)
+    if (mre_fread(buf, sizeof(buf), 1, fs) < 1)
     {
         return;
     }
@@ -279,7 +279,7 @@ static void ParseFlacFile(file_metadata_t *metadata, FILE *fs)
         long pos = -1;
 
         // Read METADATA_BLOCK_HEADER:
-        if (fread(header, 4, 1, fs) < 1)
+        if (mre_fread(header, 4, 1, fs) < 1)
         {
             return;
         }
@@ -288,7 +288,7 @@ static void ParseFlacFile(file_metadata_t *metadata, FILE *fs)
         last_block = (header[0] & 0x80) != 0;
         block_len = (header[1] << 16) | (header[2] << 8) | header[3];
 
-        pos = ftell(fs);
+        pos = mre_ftell(fs);
         if (pos < 0)
         {
             return;
@@ -309,7 +309,7 @@ static void ParseFlacFile(file_metadata_t *metadata, FILE *fs)
         }
 
         // Seek to start of next block.
-        if (fseek(fs, pos + block_len, SEEK_SET) != 0)
+        if (mre_fseek(fs, pos + block_len, SEEK_SET) != 0)
         {
             return;
         }
@@ -320,7 +320,7 @@ static void ParseOggIdHeader(file_metadata_t *metadata, FILE *fs)
 {
     byte buf[21];
 
-    if (fread(buf, sizeof(buf), 1, fs) < 1)
+    if (mre_fread(buf, sizeof(buf), 1, fs) < 1)
     {
         return;
     }
@@ -345,7 +345,7 @@ static void ParseOggFile(file_metadata_t *metadata, FILE *fs)
 	// byte onto the end.
         memmove(buf, buf + 1, sizeof(buf) - 1);
 
-        if (fread(&buf[6], 1, 1, fs) < 1)
+        if (mre_fread(&buf[6], 1, 1, fs) < 1)
         {
             return;
         }
@@ -377,7 +377,7 @@ static void ReadLoopPoints(char *filename, file_metadata_t *metadata)
     metadata->start_time = 0;
     metadata->end_time = -1;
 
-    fs = fopen(filename, "r");
+    fs = mre_fopen(filename, "r");
 
     if (fs == NULL)
     {
@@ -387,9 +387,9 @@ static void ReadLoopPoints(char *filename, file_metadata_t *metadata)
     // Check for a recognized file format; use the first four bytes
     // of the file.
 
-    if (fread(header, 4, 1, fs) < 1)
+    if (mre_fread(header, 4, 1, fs) < 1)
     {
-        fclose(fs);
+        mre_fclose(fs);
         return;
     }
 
@@ -402,7 +402,7 @@ static void ReadLoopPoints(char *filename, file_metadata_t *metadata)
         ParseOggFile(metadata, fs);
     }
 
-    fclose(fs);
+    mre_fclose(fs);
 
     // Only valid if at the very least we read the sample rate.
     metadata->valid = metadata->samplerate_hz > 0;
@@ -627,7 +627,7 @@ static boolean ReadSubstituteConfig(char *filename)
     int linenum = 1;
     int old_subst_music_len;
 
-    fs = fopen(filename, "r");
+    fs = mre_fopen(filename, "r");
 
     if (fs == NULL)
     {
@@ -651,7 +651,7 @@ static boolean ReadSubstituteConfig(char *filename)
         ++linenum;
     }
 
-    fclose(fs);
+    mre_fclose(fs);
 
     return true;
 }
@@ -730,7 +730,7 @@ static void DumpSubstituteConfig(char *filename)
     FILE *fs;
     int lumpnum, h;
 
-    fs = fopen(filename, "w");
+    fs = mre_fopen(filename, "w");
 
     if (fs == NULL)
     {
@@ -768,7 +768,7 @@ static void DumpSubstituteConfig(char *filename)
     }
 
     fprintf(fs, "\n");
-    fclose(fs);
+    mre_fclose(fs);
 
     printf("Substitute MIDI config file written to %s.\n", filename);
     I_Quit();
@@ -789,7 +789,7 @@ static boolean WriteWrapperTimidityConfig(char *write_path)
         return false;
     }
 
-    fstream = fopen(write_path, "w");
+    fstream = mre_fopen(write_path, "w");
 
     if (fstream == NULL)
     {
@@ -806,7 +806,7 @@ static boolean WriteWrapperTimidityConfig(char *write_path)
     }
 
     fprintf(fstream, "source %s\n", timidity_cfg_path);
-    fclose(fstream);
+    mre_fclose(fstream);
 
     return true;
 }

@@ -33,6 +33,32 @@ void free(void* ptr)
 	vm_free(ptr);
 }
 
+void* _malloc_r(struct _reent* unused, size_t size)
+{
+	(void)unused;
+	void* ret = malloc(size);
+	return ret;
+}
+
+void* _calloc_r(struct _reent* unused, size_t count, size_t size)
+{
+	(void)unused;
+	void* ret = calloc(count, size);
+	return ret;
+}
+
+void* _realloc_r(struct _reent* unused, void* ptr, size_t newsize)
+{
+	(void)unused;
+	void* ret = realloc(ptr, newsize);
+	return ret;
+}
+void _free_r(struct _reent* unused, void* ptr)
+{
+	(void)unused;
+	free(ptr);
+}
+
 void trace_on(){
 	typedef void (*trace_on_t)();
 	static trace_on_t trace_on_p = (trace_on_t)0xFFFFFFFF;

@@ -154,7 +154,7 @@ wad_file_t *W_AddFile (char *filename)
 
     if (wad_file == NULL)
     {
-		printf (" couldn't open %s\n", filename);
+		mre_printf (" couldn't open %s\n", filename);
 		return NULL;
     }
 
@@ -506,7 +506,7 @@ void W_Profile (void)
     }
     profilecount++;
 #if ORIGCODE
-    f = fopen ("waddump.txt","w");
+    f = mre_fopen ("waddump.txt","w");
     name[8] = 0;
 
     for (i=0 ; i<numlumps ; i++)
@@ -520,14 +520,14 @@ void W_Profile (void)
 	for ( ; j<8 ; j++)
 	    name[j] = ' ';
 
-	fprintf (f,"%s ",name);
+	mre_fprintf (f,"%s ",name);
 
 	for (j=0 ; j<profilecount ; j++)
-	    fprintf (f,"    %c",info[i][j]);
+	    mre_fprintf (f,"    %c",info[i][j]);
 
-	fprintf (f,"\n");
+	mre_fprintf (f,"\n");
     }
-    fclose (f);
+    mre_fclose (f);
 #endif
 }
 

@@ -1613,7 +1613,7 @@ static void SaveDefaultCollection(default_collection_t *collection)
     int i, v;
     FILE *f;
 	
-    f = fopen (collection->filename, "w");
+    f = mre_fopen (collection->filename, "w");
     if (!f)
 	return; // can't write the file, but don't complain
 
@@ -1632,10 +1632,10 @@ static void SaveDefaultCollection(default_collection_t *collection)
 
         // Print the name and line up all values at 30 characters
 
-        chars_written = fprintf(f, "%s ", defaults[i].name);
+        chars_written = mre_fprintf(f, "%s ", defaults[i].name);
 
         for (; chars_written < 30; ++chars_written)
-            fprintf(f, " ");
+            mre_fprintf(f, " ");
 
         // Print the value
 
@@ -1684,30 +1684,30 @@ static void SaveDefaultCollection(default_collection_t *collection)
                     }
                 }
 
-	        fprintf(f, "%i", v);
+	        mre_fprintf(f, "%i", v);
                 break;
 
             case DEFAULT_INT:
-	        fprintf(f, "%i", * (int *) defaults[i].location);
+	        mre_fprintf(f, "%i", * (int *) defaults[i].location);
                 break;
 
             case DEFAULT_INT_HEX:
-	        fprintf(f, "0x%x", * (int *) defaults[i].location);
+	        mre_fprintf(f, "0x%x", * (int *) defaults[i].location);
                 break;
 
             case DEFAULT_FLOAT:
-                fprintf(f, "%f", * (float *) defaults[i].location);
+                mre_fprintf(f, "%f", * (float *) defaults[i].location);
                 break;
 
             case DEFAULT_STRING:
-	        fprintf(f,"\"%s\"", * (char **) (defaults[i].location));
+	        mre_fprintf(f,"\"%s\"", * (char **) (defaults[i].location));
                 break;
         }
 
-        fprintf(f, "\n");
+        mre_fprintf(f, "\n");
     }
 
-    fclose (f);
+    mre_fclose (f);
 #endif
 }
 
@@ -1777,7 +1777,7 @@ static void LoadDefaultCollection(default_collection_t *collection)
     char strparm[100];
 
     // read the file in, overriding any set defaults
-    f = fopen(collection->filename, "r");
+    f = mre_fopen(collection->filename, "r");
 
     if (f == NULL)
     {
@@ -1827,7 +1827,7 @@ static void LoadDefaultCollection(default_collection_t *collection)
         SetVariable(def, strparm);
     }
 
-    fclose (f);
+    mre_fclose (f);
 #endif
 }
 
@@ -1897,7 +1897,7 @@ void M_LoadDefaults (void)
     if (i)
     {
 	doom_defaults.filename = myargv[i+1];
-	printf ("	default file: %s\n",doom_defaults.filename);
+	mre_printf ("	default file: %s\n",doom_defaults.filename);
     }
     else
     {
@@ -1905,7 +1905,7 @@ void M_LoadDefaults (void)
             = M_StringJoin(configdir, default_main_config, NULL);
     }
 
-    printf("saving config in %s\n", doom_defaults.filename);
+    mre_printf("saving config in %s\n", doom_defaults.filename);
 
     //!
     // @arg <file>
@@ -1919,7 +1919,7 @@ void M_LoadDefaults (void)
     if (i)
     {
         extra_defaults.filename = myargv[i+1];
-        printf("        extra configuration file: %s\n", 
+        mre_printf("        extra configuration file: %s\n", 
                extra_defaults.filename);
     }
     else
@@ -2071,7 +2071,7 @@ void M_SetConfigDir(char *dir)
 
     if (strcmp(configdir, "") != 0)
     {
-        printf("Using %s for configuration and saves\n", configdir);
+        mre_printf("Using %s for configuration and saves\n", configdir);
     }
 
     // Make the directory if it doesn't already exist:
@@ -2119,7 +2119,7 @@ char *M_GetSaveGameDir(char *iwadname)
 
         M_MakeDirectory(savegamedir);
 
-        printf ("Using %s for savegames\n", savegamedir);
+        mre_printf ("Using %s for savegames\n", savegamedir);
 #endif
     }
 

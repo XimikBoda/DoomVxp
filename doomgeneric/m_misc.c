@@ -55,9 +55,9 @@
 void M_MakeDirectory(char *path)
 {
 #ifdef _WIN32
-    mkdir(path);
+    mre_mkdir(path);
 #else
-    mkdir(path, 0755);
+    mre_mkdir(path, 0755);
 #endif
 }
 
@@ -67,11 +67,11 @@ boolean M_FileExists(char *filename)
 {
     FILE *fstream;
 
-    fstream = fopen(filename, "r");
+    fstream = mre_fopen(filename, "r");
 
     if (fstream != NULL)
     {
-        fclose(fstream);
+        mre_fclose(fstream);
         return true;
     }
     else
@@ -93,14 +93,14 @@ long M_FileLength(FILE *handle)
     long length;
 
     // save the current position in the file
-    savedpos = ftell(handle);
+    savedpos = mre_ftell(handle);
     
     // jump to the end and find the length
-    fseek(handle, 0, SEEK_END);
-    length = ftell(handle);
+    mre_fseek(handle, 0, SEEK_END);
+    length = mre_ftell(handle);
 
     // go back to the old location
-    fseek(handle, savedpos, SEEK_SET);
+    mre_fseek(handle, savedpos, SEEK_SET);
 
     return length;
 }
@@ -114,13 +114,13 @@ boolean M_WriteFile(char *name, void *source, int length)
     FILE *handle;
     int	count;
 	
-    handle = fopen(name, "wb");
+    handle = mre_fopen(name, "wb");
 
     if (handle == NULL)
 	return false;
 
-    count = fwrite(source, 1, length, handle);
-    fclose(handle);
+    count = mre_fwrite(source, 1, length, handle);
+    mre_fclose(handle);
 	
     if (count < length)
 	return false;
@@ -139,7 +139,7 @@ int M_ReadFile(char *name, byte **buffer)
     int	count, length;
     byte *buf;
 	
-    handle = fopen(name, "rb");
+    handle = mre_fopen(name, "rb");
     if (handle == NULL)
 	I_Error ("Couldn't read file %s", name);
 
@@ -149,8 +149,8 @@ int M_ReadFile(char *name, byte **buffer)
     length = M_FileLength(handle);
     
     buf = Z_Malloc (length, PU_STATIC, NULL);
-    count = fread(buf, 1, length, handle);
-    fclose (handle);
+    count = mre_fread(buf, 1, length, handle);
+    mre_fclose (handle);
 	
     if (count < length)
 	I_Error ("Couldn't read file %s", name);
@@ -189,10 +189,10 @@ char *M_TempFile(char *s)
 
 boolean M_StrToInt(const char *str, int *result)
 {
-    return sscanf(str, " 0x%x", result) == 1
-        || sscanf(str, " 0X%x", result) == 1
-        || sscanf(str, " 0%o", result) == 1
-        || sscanf(str, " %d", result) == 1;
+    return vm_sscanf(str, " 0x%x", result) == 1
+        || vm_sscanf(str, " 0X%x", result) == 1
+        || vm_sscanf(str, " 0%o", result) == 1
+        || vm_sscanf(str, " %d", result) == 1;
 }
 
 void M_ExtractFileBase(char *path, char *dest)
@@ -223,7 +223,7 @@ void M_ExtractFileBase(char *path, char *dest)
     {
         if (length >= 8)
         {
-            printf("Warning: Truncated '%s' lump name to '%.8s'.\n",
+            mre_printf("Warning: Truncated '%s' lump name to '%.8s'.\n",
                    filename, dest);
             break;
         }
@@ -491,7 +491,8 @@ int M_vsnprintf(char *buf, size_t buf_len, const char *s, va_list args)
     // Windows (and other OSes?) has a vsnprintf() that doesn't always
     // append a trailing \0. So we must do it, and write into a buffer
     // that is one byte shorter; otherwise this function is unsafe.
-    result = vsnprintf(buf, buf_len, s, args);
+    //result = vsnprintf(buf, buf_len, s, args);
+    result = vm_vsprintf(buf, s, args);
 
     // If truncated, change the final char in the buffer to a \0.
     // A negative result indicates a truncated buffer on Windows.
