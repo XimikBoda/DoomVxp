@@ -4,7 +4,7 @@ project ("DoomVxp")
 
 set(APP_NAME "Doom")
 set(DEVELOPER_NAME "Ximik_Boda")
-set(RAM "7000" STRING "Ram requirement (in kb)")
+set(RAM "6000" STRING "Ram requirement (in kb)")
 set(IMSI "1234567890" CACHE STRING "Imsi of first SIM-card")
 set(API "File SIM card ProMng" CACHE STRING "Api for app")
 option(BACKGROUND "App can work background" OFF)

@@ -96,11 +96,11 @@ void handle_sysevt(VMINT message, VMINT param) {
 	switch (message) {
 	case VM_MSG_CREATE:
 	case VM_MSG_ACTIVE:
-		layer_hdl[0] = vm_graphic_create_layer(0, 0, screen_w, screen_h, -1);
+		//layer_hdl[0] = vm_graphic_create_layer(0, 0, screen_w, screen_h, -1);
 
-		layer_buf = vm_graphic_get_layer_buffer(layer_hdl[0]);
+		//layer_buf = vm_graphic_get_layer_buffer(layer_hdl[0]);
 
-		vm_graphic_set_clip(0, 0, screen_w, screen_h);
+		//vm_graphic_set_clip(0, 0, screen_w, screen_h);
 		break;
 		
 	case VM_MSG_PAINT:

@@ -43,11 +43,15 @@ int mre_fclose(FILE* _Stream) {
 	return 0;
 }
 
+int mre_fflush(FILE* _Stream) {
+	return 0;
+}
+
 int mre_mkdir(char const* _Path) {
 	VMCHAR wstr[260];
 	vm_ascii_to_ucs2(wstr, 260 * 2, _Path);
 
-	return vm_file_mkdir(wstr);
+	return 0;//vm_file_mkdir(wstr);
 }
 
 int mre_putchar(int _Character) {}
@@ -56,6 +60,6 @@ int mre_puts(char const* _Buffer) {}
 
 int mre_printf(char const* const _Format, ...) {}
 
-int mre_fprintf() {}
+int mre_fprintf(char const* const _Format, ...) {}
 
-int mre_vfprintf() {}
+int mre_vfprintf(char const* const _Format, ...) {}

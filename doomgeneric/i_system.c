@@ -55,8 +55,8 @@
 #include <CoreFoundation/CFUserNotification.h>
 #endif
 
-#define DEFAULT_RAM 6 /* MiB */
-#define MIN_RAM     6  /* MiB */
+#define DEFAULT_RAM 3 /* MiB */
+#define MIN_RAM     3  /* MiB */
 
 
 typedef struct atexit_listentry_s atexit_listentry_t;
@@ -363,6 +363,9 @@ void I_Error (char *error, ...)
     atexit_listentry_t *entry;
     boolean exit_gui_popup;
 
+    FILE *h = mre_fopen("E:\\doomlog.txt", "w");
+    mre_fwrite(error, strlen(error), 1, h);
+
     if (already_quitting)
     {
         mre_fprintf(stderr, "Warning: recursive call to I_Error detected.\n");
@@ -381,7 +384,7 @@ void I_Error (char *error, ...)
     mre_vfprintf(stderr, error, argptr);
     mre_fprintf(stderr, "\n\n");
     va_end(argptr);
-    fflush(stderr);
+    mre_fflush(stderr);
 
     // Write a copy of the message into buffer.
     va_start(argptr, error);
