@@ -14,4 +14,4 @@ else()
     message(FATAL_ERROR "Wrong target system")
 endif()
 
-target_link_libraries(${PROJECT_NAME} main mreapi)
+target_link_libraries(${PROJECT_NAME} doomgeneric mreapi)

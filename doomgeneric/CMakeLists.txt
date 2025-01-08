@@ -33,6 +33,7 @@ add_library(${PROJECT_NAME} STATIC
     doomdef.h
     doomfeatures.h
     doomgeneric.c
+    doomgeneric_mre.c
     doomgeneric.h
     doomkeys.h
     doomstat.c
@@ -53,8 +54,6 @@ add_library(${PROJECT_NAME} STATIC
     hu_lib.h
     hu_stuff.c
     hu_stuff.h
-    i_allegromusic.c
-    i_allegrosound.c
     i_cdmus.c
     i_cdmus.h
     i_endoom.c
@@ -64,8 +63,6 @@ add_library(${PROJECT_NAME} STATIC
     i_joystick.h
     i_scale.c
     i_scale.h
-    i_sdlmusic.c
-    i_sdlsound.c
     i_sound.c
     i_sound.h
     i_swap.h
