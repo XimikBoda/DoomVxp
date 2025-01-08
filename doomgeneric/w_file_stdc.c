@@ -35,7 +35,7 @@ static wad_file_t *W_StdC_OpenFile(char *path)
     stdc_wad_file_t *result;
     FILE *fstream;
 
-    fstream = fopen(path, "rb");
+    fstream = mre_fopen(path, "rb");
 
     if (fstream == NULL)
     {
@@ -59,7 +59,7 @@ static void W_StdC_CloseFile(wad_file_t *wad)
 
     stdc_wad = (stdc_wad_file_t *) wad;
 
-    fclose(stdc_wad->fstream);
+    mre_fclose(stdc_wad->fstream);
     Z_Free(stdc_wad);
 }
 
@@ -76,11 +76,11 @@ size_t W_StdC_Read(wad_file_t *wad, unsigned int offset,
 
     // Jump to the specified position in the file.
 
-    fseek(stdc_wad->fstream, offset, SEEK_SET);
+    mre_fseek(stdc_wad->fstream, offset, SEEK_SET);
 
     // Read into the buffer.
 
-    result = fread(buffer, 1, buffer_len, stdc_wad->fstream);
+    result = mre_fread(buffer, 1, buffer_len, stdc_wad->fstream);
 
     return result;
 }

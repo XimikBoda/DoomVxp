@@ -710,12 +710,12 @@ void WritePCXfile(char *filename, byte *data,
 
 static void error_fn(png_structp p, png_const_charp s)
 {
-    printf("libpng error: %s\n", s);
+    mre_printf("libpng error: %s\n", s);
 }
 
 static void warning_fn(png_structp p, png_const_charp s)
 {
-    printf("libpng warning: %s\n", s);
+    mre_printf("libpng warning: %s\n", s);
 }
 
 void WritePNGfile(char *filename, byte *data,
@@ -728,7 +728,7 @@ void WritePNGfile(char *filename, byte *data,
     FILE *handle;
     int i;
 
-    handle = fopen(filename, "wb");
+    handle = mre_fopen(filename, "wb");
     if (!handle)
     {
         return;
@@ -780,7 +780,7 @@ void WritePNGfile(char *filename, byte *data,
 
     png_write_end(ppng, pinfo);
     png_destroy_write_struct(&ppng, &pinfo);
-    fclose(handle);
+    mre_fclose(handle);
 }
 #endif
 

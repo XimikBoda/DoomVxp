@@ -58,7 +58,7 @@ void vm_main(void) {
 	layer_buf = vm_graphic_get_layer_buffer(layer_hdl[0]);
 	vm_graphic_set_clip(0, 0, screen_w, screen_h);
 
-	char* argv[3] = { 0, "-iwad", "C:\\DOOM.WAD" };
+	char* argv[3] = { 0, "-iwad", "E:\\DOOM.WAD" };
 	doomgeneric_Create(3, argv);
 
 	vm_create_timer(1, timer);

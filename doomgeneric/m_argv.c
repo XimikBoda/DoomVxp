@@ -87,17 +87,17 @@ static void LoadResponseFile(int argv_index)
     response_filename = myargv[argv_index] + 1;
 
     // Read the response file into memory
-    handle = fopen(response_filename, "rb");
+    handle = mre_fopen(response_filename, "rb");
 
     if (handle == NULL)
     {
-        printf ("\nNo such response file!");
+        mre_printf ("\nNo such response file!");
 #if ORIGCODE
         exit(1);
 #endif
     }
 
-    printf("Found response file %s!\n", response_filename);
+    mre_printf("Found response file %s!\n", response_filename);
 
     size = M_FileLength(handle);
 
@@ -112,7 +112,7 @@ static void LoadResponseFile(int argv_index)
 
     while (i < size)
     {
-        k = fread(file + i, 1, size - i, handle);
+        k = mre_fread(file + i, 1, size - i, handle);
 
         if (k < 0)
         {
@@ -122,7 +122,7 @@ static void LoadResponseFile(int argv_index)
         i += k;
     }
 
-    fclose(handle);
+    mre_fclose(handle);
 
     // Create new arguments list array
 
@@ -218,11 +218,11 @@ static void LoadResponseFile(int argv_index)
     // Disabled - Vanilla Doom does not do this.
     // Display arguments
 
-    printf("%d command-line args:\n", myargc);
+    mre_printf("%d command-line args:\n", myargc);
 
     for (k=1; k<myargc; k++)
     {
-        printf("'%s'\n", myargv[k]);
+        mre_printf("'%s'\n", myargv[k]);
     }
 #endif
 #endif

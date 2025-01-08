@@ -510,7 +510,7 @@ WI_drawOnLnode
     else
     {
 	// DEBUG
-	printf("Could not place patch on level %d", n+1); 
+	mre_printf("Could not place patch on level %d", n+1); 
     }
 }
 
