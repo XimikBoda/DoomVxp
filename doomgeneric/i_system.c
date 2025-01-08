@@ -168,17 +168,18 @@ void I_PrintBanner(char *msg)
     int i;
     int spaces = 35 - (strlen(msg) / 2);
 
-    for (i=0; i<spaces; ++i)
-        mre_putchar(' ');
+    //for (i=0; i<spaces; ++i)
+    //    mre_putchar(' ');
 
     mre_puts(msg);
+    mre_putchar('\n');
 }
 
 void I_PrintDivider(void)
 {
     int i;
 
-    for (i=0; i<75; ++i)
+    for (i=0; i< console_get_c_w(); ++i)
     {
         mre_putchar('=');
     }
