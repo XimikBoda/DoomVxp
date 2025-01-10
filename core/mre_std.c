@@ -6,6 +6,9 @@
 #include "console.h"
 
 FILE* mre_fopen(char const* _FileName, char const* _Mode) {
+	if (_FileName[0] == '.' && _FileName[1] == '\\')
+		_FileName += 2;
+
 	VMCHAR wstr[260];
 	vm_ascii_to_ucs2(wstr, 260 * 2, _FileName);
 
@@ -76,6 +79,20 @@ int mre_printf(char const* const format, ...) {
 	return ret;
 }
 
-int mre_fprintf(char const* const _Format, ...) {}
+int mre_fprintf(int un, char const* const format, ...) {
+	va_list aptr;
 
-int mre_vfprintf(char const* const _Format, ...) {}
+	va_start(aptr, format);
+	int ret = vsprintf(buf, format, aptr);
+	va_end(aptr);
+
+	console_put_str(buf);
+	return ret;
+}
+
+int mre_vfprintf(int un, char const* const format, va_list argptr) {
+	int ret = vsprintf(buf, format, argptr);
+
+	console_put_str(buf);
+	return ret;
+}
