@@ -19,7 +19,7 @@
 #include <stdlib.h>
 
 #if defined(FEATURE_SOUND) && !defined(__DJGPP__)
-#include <SDL_mixer.h>
+//#include <SDL_mixer.h>
 #endif
 
 #include "config.h"
@@ -131,7 +131,7 @@ static void InitSfxModule(boolean use_sfx_prefix)
 static void InitMusicModule(void)
 {
 #ifdef FEATURE_SOUND
-    music_module = &DG_music_module;
+    //music_module = &DG_music_module;
 #endif /* FEATURE_SOUND */
 }
 
@@ -409,8 +409,8 @@ void I_BindSoundVariables(void)
     M_BindVariable("snd_cachesize",     &snd_cachesize);
 
 #ifdef FEATURE_SOUND
-    M_BindVariable("use_libsamplerate",   &use_libsamplerate);
-    M_BindVariable("libsamplerate_scale", &libsamplerate_scale);
+    //M_BindVariable("use_libsamplerate",   &use_libsamplerate);
+    //M_BindVariable("libsamplerate_scale", &libsamplerate_scale);
 #endif
 
     // Before SDL_mixer version 1.2.11, MIDI music caused the game
