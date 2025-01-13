@@ -97,8 +97,6 @@ add_library(${PROJECT_NAME} STATIC
     m_random.h
     memio.c
     memio.h
-    mus2mid.c
-    mus2mid.h
     net_client.h
     net_dedicated.h
     net_defs.h
@@ -188,4 +186,4 @@ add_library(${PROJECT_NAME} STATIC
     z_zone.h
 )
 
-target_link_libraries(${PROJECT_NAME} mreapi console)
+target_link_libraries(${PROJECT_NAME} mreapi console ADLMIDI_static)
