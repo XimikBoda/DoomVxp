@@ -74,7 +74,7 @@ static int snd_mport = 0;
 static sound_module_t *sound_modules[] = 
 {
     #ifdef FEATURE_SOUND
-    &DG_sound_module,
+    //&DG_sound_module,
     #endif
     NULL,
 };
@@ -131,7 +131,7 @@ static void InitSfxModule(boolean use_sfx_prefix)
 static void InitMusicModule(void)
 {
 #ifdef FEATURE_SOUND
-    //music_module = &DG_music_module;
+    music_module = &DG_music_module;
 #endif /* FEATURE_SOUND */
 }
 

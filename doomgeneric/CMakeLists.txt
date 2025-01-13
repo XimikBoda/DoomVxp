@@ -66,6 +66,7 @@ add_library(${PROJECT_NAME} STATIC
     i_sound.c
     i_sound.h
     i_mresound.c
+    i_mremusic.c
     i_swap.h
     i_system.c
     i_system.h
