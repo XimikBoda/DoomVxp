@@ -268,7 +268,7 @@ static void LockAllocatedSound(allocated_sound_t* snd)
 
     ++snd->use_count;
 
-    //printf("++ %s: Use count=%i\n", snd->sfxinfo->name, snd->use_count);
+    //mre_printf("++ %s: Use count=%i\n", snd->sfxinfo->name, snd->use_count);
 
     // When we use a sound, re-link it into the list at the head, so
     // that the oldest sounds fall to the end of the list for freeing.
@@ -288,7 +288,7 @@ static void UnlockAllocatedSound(allocated_sound_t* snd)
 
     --snd->use_count;
 
-    //printf("-- %s: Use count=%i\n", snd->sfxinfo->name, snd->use_count);
+    //mre_printf("-- %s: Use count=%i\n", snd->sfxinfo->name, snd->use_count);
 }
 
 // When a sound stops, check if it is still playing.  If it is not, 
@@ -839,7 +839,7 @@ static int I_MRE_StartSound(sfxinfo_t* sfxinfo, int channel, int vol, int sep)
     vm_bitstream_audio_start_param param;
     param.audio_path = 0;
     param.start_time = 0;
-    param.volume = snd->chunk.volume;
+    param.volume = snd->chunk.volume/2;
 
     vm_bitstream_audio_stop(bitstreams_handles[channel]);
     vm_bitstream_audio_put_data(bitstreams_handles[channel], snd->chunk.abuf, snd->chunk.alen, &writen);
@@ -920,7 +920,7 @@ static void I_MRE_ShutdownSound(void)
     sound_initialized = false;
 }
 
-void bitstream_audio_result(VMINT handle, VMINT result) {}
+static void bitstream_audio_result(VMINT handle, VMINT result) {}
 
 static boolean I_MRE_InitSound(boolean _use_sfx_prefix)
 {
@@ -937,7 +937,7 @@ static boolean I_MRE_InitSound(boolean _use_sfx_prefix)
     }
 
     audio_type.bitPerSample = 16;
-    audio_type.isStereo = 0;
+    audio_type.isStereo = 1;
     audio_type.sampleFreq = VM_BITSTREAM_SAMPLE_FREQ_11025;
     audio_type.vm_codec_type = VM_BITSTREAM_CODEC_TYPE_PCM;
 

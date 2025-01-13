@@ -97,8 +97,6 @@ add_library(${PROJECT_NAME} STATIC
     m_random.h
     memio.c
     memio.h
-    mus2mid.c
-    mus2mid.h
     net_client.h
     net_dedicated.h
     net_defs.h
