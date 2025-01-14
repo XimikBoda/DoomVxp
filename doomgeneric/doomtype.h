@@ -83,19 +83,19 @@ typedef uint8_t byte;
 
 #include <limits.h>
 
-#if defined(_WIN32) || defined(__DJGPP__)
+//#if defined(_WIN32) || defined(__DJGPP__)
 
 #define DIR_SEPARATOR '\\'
 #define DIR_SEPARATOR_S "\\"
 #define PATH_SEPARATOR ';'
 
-#else
-
-#define DIR_SEPARATOR '/'
-#define DIR_SEPARATOR_S "/"
-#define PATH_SEPARATOR ':'
-
-#endif
+//#else
+//
+//#define DIR_SEPARATOR '/'
+//#define DIR_SEPARATOR_S "/"
+//#define PATH_SEPARATOR ':'
+//
+//#endif
 
 #define arrlen(array) (sizeof(array) / sizeof(*array))
 

@@ -168,21 +168,7 @@ char *M_TempFile(char *s)
 {
     char *tempdir;
 
-#if defined(_WIN32) || defined(__DJGPP__)
-
-    // Check the TEMP environment variable to find the location.
-
-    tempdir = getenv("TEMP");
-
-    if (tempdir == NULL)
-    {
-        tempdir = ".";
-    }
-#else
-    // In Unix, just use /tmp.
-
-    tempdir = "/tmp";
-#endif
+    tempdir = "E:\\tmp";
 
     return M_StringJoin(tempdir, DIR_SEPARATOR_S, s, NULL);
 }
