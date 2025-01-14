@@ -12,6 +12,8 @@
 #include "doomgeneric.h"
 #include "doomkeys.h"
 
+#include <bitstream.h>
+
 VMINT		layer_hdl[1];	// layer handle array. 
 VMUINT8* layer_buf = 0;
 
@@ -131,6 +133,12 @@ void timer(int tid) {
 	doomgeneric_Tick();
 }
 
+void handle_sysevt(VMINT message, VMINT param) {
+	if (message == VM_MSG_QUIT) {
+		bitstream_close();
+	}
+}
+
 
 void vm_main(void) {
 	layer_hdl[0] = -1;
@@ -138,6 +146,7 @@ void vm_main(void) {
 	screen_h = vm_graphic_get_screen_height();
 
 	vm_reg_keyboard_callback(handle_keyevt);
+	vm_reg_sysevt_callback(handle_sysevt);
 
 	layer_hdl[0] = vm_graphic_create_layer(0, 0, screen_w, screen_h, -1);
 	layer_buf = vm_graphic_get_layer_buffer(layer_hdl[0]);
