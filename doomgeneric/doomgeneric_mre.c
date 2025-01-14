@@ -108,7 +108,7 @@ void flush_layer() {
 void DG_Init() {}
 void DG_DrawFrame() {
 	if (first_frame) {
-		console_init(DOOMGENERIC_RESY - screen_w, screen_h, layer_buf);
+		console_set_clear_width(screen_w - DOOMGENERIC_RESY);
 		first_frame = 0;
 	}
 
