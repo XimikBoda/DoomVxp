@@ -5,6 +5,8 @@
 #include <stdio.h>
 
 void _exit(int c) {
+	void (*null_func)() = 0;
+	null_func();
 	//vm_exit_app();
 	//thread_end();
 }
