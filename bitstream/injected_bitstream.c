@@ -110,12 +110,16 @@ void injected_bitstream_put_buffer(VMUINT8* buf, VMUINT32 buf_size, VMUINT32* wr
     if (written)
         *(written) = used_len;
 
-    //pcm->Play(pcm);
+    pcm->Play(pcm);
 }
 
 void injected_bitstream_start() {
     if (!pcm) return;
-   pcm->Play(pcm); 
+   //pcm->Play(pcm); 
+}
+
+VMINT injected_bitstream_get_buffer_size() {
+    return RING_BUFFER_SIZE;
 }
 
 VMINT injected_bitstream_get_free_buffer_size() {

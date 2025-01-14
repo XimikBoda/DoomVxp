@@ -120,6 +120,7 @@ int injected_bitstream_init(PCM_Param* pcmParam, PCM_handle_t handle);
 void injected_bitstream_deinit();
 void injected_bitstream_put_buffer(VMUINT8* buf, VMUINT32 buf_size, VMUINT32* written);
 void injected_bitstream_start();
+VMINT injected_bitstream_get_buffer_size();
 VMINT injected_bitstream_get_free_buffer_size();
 
 #ifdef __cplusplus
