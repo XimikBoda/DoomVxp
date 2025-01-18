@@ -7,7 +7,7 @@ static PCM_Open_t PCM_Open = 0x00000000;
 static PCM* pcm = 0;
 static VMUINT8* ring_buf = 0;
 
-const int RING_BUFFER_SIZE = 64 * 1024;
+const int RING_BUFFER_SIZE = 4 * 1024;
 
 // Scaning phone firmare for PCM_Open entry point by magic value. Warning: May cause fatal error (reboot) after activation
 static void injector() {

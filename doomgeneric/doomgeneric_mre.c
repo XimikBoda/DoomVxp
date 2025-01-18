@@ -57,7 +57,7 @@ static unsigned char convertToDoomKey(unsigned int key) {
 		key = KEY_FIRE;
 		break;
 	case VM_KEY_NUM2:
-		key = VM_KEY_SPACE;
+		key = KEY_USE;
 		break;
 	default:
 		key = 0;
