@@ -4,6 +4,8 @@ typedef struct ChanelInfo {
 	Mix_Chunk *chunk;
 	VMUINT pos;
 	char play;
+	VMUINT8 left_planning;
+	VMUINT8 right_planning;
 };
 
 static struct ChanelInfo channels[16];
@@ -19,6 +21,8 @@ VMINT mixer_init(VMINT num_chanels, VMBOOL isStereo, VMUINT8 bitPerSample, vm_bi
 	for (int i = 0; i < 16; ++i) {
 		channels[i].chunk = 0;
 		channels[i].play = 0;
+		channels[i].left_planning = 255;
+		channels[i].right_planning = 255;
 	}
 
 	bitstream_start(0, 0, 6);
@@ -34,6 +38,11 @@ void mixer_setup_channel(VMINT chnanel, Mix_Chunk* chunk, VMBOOL play) {
 	channels[chnanel].play = play;
 }
 
+void mixer_set_planing(VMINT chnanel, VMUINT8 left, VMUINT8 right) {
+	channels[chnanel].left_planning = left;
+	channels[chnanel].right_planning = right;
+}
+
 void mixer_stop(VMINT chnanel) {
 	channels[chnanel].play = 0;
 }
@@ -42,11 +51,13 @@ VMBOOL mixer_is_playing(VMINT chnanel) {
 	return channels[chnanel].play;
 }
 
-static void mix(short buf_a[], short buf_b[], int samples) {
+static void mix(short buf_a[], short buf_b[], int samples, VMUINT8 left, VMUINT8 right) {
 	for (int i = 0; i < samples; ++i) {
 		int a = buf_a[i];
 		int b = buf_b[i];
 		int m;
+
+		b = (b * (i & 1 ? right : left)) / 255;
 
 		// Make both samples unsigned (0..65535)
 		a += 32768;
@@ -121,14 +132,10 @@ void mixer_update() {
 
 			int to_play = channel->chunk->alen - channel->pos;
 			if (to_play > play_buf_size)
-				to_play = play_buf_size;
+				to_play = play_buf_size; 
 
-			if (first) {
-				memcpy(buf_samples, channel->chunk->abuf + channel->pos, to_play);
-				first = 0;
-			}
-			else
-				mix(buf_samples, channel->chunk->abuf + channel->pos, to_play / 2);
+			mix(buf_samples, channel->chunk->abuf + channel->pos, to_play / 2, 
+				channel->left_planning, channel->right_planning);
 
 			channel->pos += to_play;
 			if (channel->pos >= channel->chunk->alen)

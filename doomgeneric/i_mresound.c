@@ -789,6 +789,7 @@ static void I_MRE_UpdateSoundParams(int handle, int vol, int sep)
 		//Mix_UnregisterAllEffects(handle);
 	}
 
+	mixer_set_planing(handle, left, right);
 	//Mix_SetPanning(handle, left, right);
 }
 
