@@ -42,7 +42,7 @@
 
 #include <mixer.h>
 
-#define LOW_PASS_FILTER 1
+#define LOW_PASS_FILTER 0
 //#define DEBUG_DUMP_WAVS
 #define NUM_CHANNELS 16
 
