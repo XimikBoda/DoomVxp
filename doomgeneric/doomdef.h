@@ -165,4 +165,35 @@ typedef enum
     
 } powerduration_t;
 
+
+FILE* mre_fopen(char const* filename, char const* f_mode);
+
+size_t mre_fread(void* buf, size_t element_size, size_t element_count, FILE* stream);
+
+size_t mre_fwrite(void* buf, size_t element_size, size_t element_count, FILE* stream);
+
+long mre_ftell(FILE* stream);
+
+int mre_fseek(FILE* stream, long offset, int origin);
+
+int mre_fclose(FILE* stream);
+
+int mre_fflush(FILE* stream);
+
+int mre_mkdir(char const* path);
+
+int mre_remove(char const* filename);
+
+int mre_rename(char const* oldfilename, char const* newfilename);
+
+int mre_putchar(int c);
+
+int mre_puts(char const* str);
+
+int mre_printf(char const* const format, ...);
+
+int mre_fprintf(int un, char const* const format, ...);
+
+int mre_vfprintf(int un, char const* const format, va_list argptr);
+
 #endif          // __DOOMDEF__
