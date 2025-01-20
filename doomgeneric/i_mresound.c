@@ -283,6 +283,9 @@ static void UnlockAllocatedSound(allocated_sound_t* snd)
 
 	--snd->use_count;
 
+	if (snd->use_count == 0)
+		FreeAllocatedSound(snd);
+
 	//mre_printf("-- %s: Use count=%i\n", snd->sfxinfo->name, snd->use_count);
 }
 

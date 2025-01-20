@@ -57,7 +57,7 @@ static void mix(short buf_a[], short buf_b[], int samples, VMUINT8 left, VMUINT8
 		int b = buf_b[i];
 		int m;
 
-		b = (b * (i & 1 ? right : left)) / 255;
+		b = ((b * (i & 1 ? right : left)) >> 8);
 
 		// Make both samples unsigned (0..65535)
 		a += 32768;

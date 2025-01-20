@@ -14,8 +14,9 @@
 
 #include <bitstream.h>
 
-VMINT		layer_hdl[1];	// layer handle array. 
+VMINT		layer_hdl[2];	// layer handle array. 
 VMUINT8* layer_buf = 0;
+VMUINT8* layer_buf2 = 0;
 
 VMINT screen_w = 0;
 VMINT screen_h = 0;
@@ -150,12 +151,17 @@ void vm_main(void) {
 
 	layer_hdl[0] = vm_graphic_create_layer(0, 0, screen_w, screen_h, -1);
 	layer_buf = vm_graphic_get_layer_buffer(layer_hdl[0]);
+
+	layer_hdl[1] = vm_graphic_create_layer(0, 0, screen_w, screen_h, -1);
+	layer_buf2 = vm_graphic_get_layer_buffer(layer_hdl[1]);
 	vm_graphic_set_clip(0, 0, screen_w, screen_h);
 
 	console_init(screen_w, screen_h, layer_buf);
 
 	vm_switch_power_saving_mode(turn_off_mode);
 	vm_kbd_set_mode(VM_KEYPAD_2KEY_NUMBER);
+
+	DG_ScreenBuffer = layer_buf2;
 
 	char* argv[3] = { 0, "-iwad", "E:\\DOOM.WAD" };
 	doomgeneric_Create(3, argv);
