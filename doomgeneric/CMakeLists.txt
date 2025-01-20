@@ -65,6 +65,7 @@ add_library(${PROJECT_NAME} STATIC
     i_scale.h
     i_sound.c
     i_sound.h
+    i_mresound.c
     i_swap.h
     i_system.c
     i_system.h
@@ -186,4 +187,4 @@ add_library(${PROJECT_NAME} STATIC
     z_zone.h
 )
 
-target_link_libraries(${PROJECT_NAME} mreapi console)
+target_link_libraries(${PROJECT_NAME} mreapi console mixer)

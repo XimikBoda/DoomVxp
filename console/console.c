@@ -7,6 +7,7 @@ const int char_width = 6;
 const int char_height = 11;
 
 static int scr_width = 0;
+static int scr_clear_width = 0;
 static int scr_height = 0;
 
 static int c_w = 0;
@@ -20,19 +21,24 @@ int console_get_c_w() {
 	return c_w;
 }
 
+void console_set_clear_width(int width) {
+	scr_clear_width = width;
+}
+
 void console_init(int _scr_w, int _scr_h, unsigned short* _scr_buf) {
 	scr_width = _scr_w;
+	scr_clear_width = _scr_w;
 	scr_height = _scr_h;
 	scr_buf = _scr_buf;
 	c_w = scr_height / char_width;
 }
 
 static void scroll_up() {
-	if (scr_width - char_height <= 0)
+	if (scr_clear_width - char_height <= 0)
 		return;
 	for (int i = 0; i < scr_height; ++i) {
 		VMUINT16* scr_line = scr_buf + scr_width * i;
-		memmove(scr_line + char_height, scr_line, (scr_width - char_height) * 2);
+		memmove(scr_line + char_height, scr_line, (scr_clear_width - char_height) * 2);
 		memset(scr_line, 0, char_height * 2);
 	}
 }
@@ -58,7 +64,8 @@ void console_put_char(char c) {
 		c_x = 0;
 	}
 	if (c == '\n') {
-		flush_layer();
+		if (scr_clear_width == scr_width)
+			flush_layer();
 		return;
 	}
 	draw_xy_char(0, c_x * char_width, c);
@@ -70,5 +77,6 @@ void console_put_str(const char* str) {
 		console_put_char(*str);
 		++str;
 	}
-	flush_layer();
+	if(scr_clear_width == scr_width)
+		flush_layer();
 }

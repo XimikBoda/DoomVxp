@@ -12,8 +12,11 @@
 #include "doomgeneric.h"
 #include "doomkeys.h"
 
-VMINT		layer_hdl[1];	// layer handle array. 
+#include <bitstream.h>
+
+VMINT		layer_hdl[2];	// layer handle array. 
 VMUINT8* layer_buf = 0;
+VMUINT8* layer_buf2 = 0;
 
 VMINT screen_w = 0;
 VMINT screen_h = 0;
@@ -55,7 +58,7 @@ static unsigned char convertToDoomKey(unsigned int key) {
 		key = KEY_FIRE;
 		break;
 	case VM_KEY_NUM2:
-		key = VM_KEY_SPACE;
+		key = KEY_USE;
 		break;
 	default:
 		key = 0;
@@ -106,7 +109,7 @@ void flush_layer() {
 void DG_Init() {}
 void DG_DrawFrame() {
 	if (first_frame) {
-		console_init(DOOMGENERIC_RESY - screen_w, screen_h, layer_buf);
+		console_set_clear_width(screen_w - DOOMGENERIC_RESY);
 		first_frame = 0;
 	}
 
@@ -131,6 +134,12 @@ void timer(int tid) {
 	doomgeneric_Tick();
 }
 
+void handle_sysevt(VMINT message, VMINT param) {
+	if (message == VM_MSG_QUIT) {
+		bitstream_close();
+	}
+}
+
 
 void vm_main(void) {
 	layer_hdl[0] = -1;
@@ -138,15 +147,21 @@ void vm_main(void) {
 	screen_h = vm_graphic_get_screen_height();
 
 	vm_reg_keyboard_callback(handle_keyevt);
+	vm_reg_sysevt_callback(handle_sysevt);
 
 	layer_hdl[0] = vm_graphic_create_layer(0, 0, screen_w, screen_h, -1);
 	layer_buf = vm_graphic_get_layer_buffer(layer_hdl[0]);
+
+	layer_hdl[1] = vm_graphic_create_layer(0, 0, screen_w, screen_h, -1);
+	layer_buf2 = vm_graphic_get_layer_buffer(layer_hdl[1]);
 	vm_graphic_set_clip(0, 0, screen_w, screen_h);
 
 	console_init(screen_w, screen_h, layer_buf);
 
 	vm_switch_power_saving_mode(turn_off_mode);
 	vm_kbd_set_mode(VM_KEYPAD_2KEY_NUMBER);
+
+	DG_ScreenBuffer = layer_buf2;
 
 	char* argv[3] = { 0, "-iwad", "E:\\DOOM.WAD" };
 	doomgeneric_Create(3, argv);

@@ -1672,8 +1672,8 @@ void G_DoSaveGame (void)
     // Now rename the temporary savegame file to the actual savegame
     // file, overwriting the old savegame if there was one there.
 
-    remove(savegame_file);
-    rename(temp_savegame_file, savegame_file);
+    mre_remove(savegame_file);
+    mre_rename(temp_savegame_file, savegame_file);
     
     gameaction = ga_nothing;
     M_StringCopy(savedescription, "", sizeof(savedescription));
@@ -2197,12 +2197,12 @@ void G_DoPlayDemo (void)
     for (i=0 ; i<MAXPLAYERS ; i++) 
 	playeringame[i] = *demo_p++; 
 
-    if (playeringame[1] || M_CheckParm("-solo-net") > 0
+   /* if (playeringame[1] || M_CheckParm("-solo-net") > 0
                         || M_CheckParm("-netdemo") > 0)
     {
 	netgame = true;
 	netdemo = true;
-    }
+    }*/
 
     // don't spend a lot of time in loadlevel 
     precache = false;

@@ -364,8 +364,8 @@ void I_Error (char *error, ...)
     atexit_listentry_t *entry;
     boolean exit_gui_popup;
 
-    FILE *h = mre_fopen("E:\\doomlog.txt", "w");
-    mre_fwrite(error, strlen(error), 1, h);
+    //FILE *h = mre_fopen("E:\\doomlog.txt", "w");
+   // mre_fwrite(error, strlen(error), 1, h);
 
     if (already_quitting)
     {
@@ -413,56 +413,56 @@ void I_Error (char *error, ...)
     // game was not run from the console (and the user will
     // therefore be unable to otherwise see the message).
     if (exit_gui_popup && !I_ConsoleStdout())
-#ifdef _WIN32
-    {
-        wchar_t wmsgbuf[512];
-
-        MultiByteToWideChar(CP_ACP, 0,
-                            msgbuf, strlen(msgbuf) + 1,
-                            wmsgbuf, sizeof(wmsgbuf));
-
-        MessageBoxW(NULL, wmsgbuf, L"", MB_OK);
-    }
-#elif defined(__MACOSX__)
-    {
-        CFStringRef message;
-	int i;
-
-	// The CoreFoundation message box wraps text lines, so replace
-	// newline characters with spaces so that multiline messages
-	// are continuous.
-
-	for (i = 0; msgbuf[i] != '\0'; ++i)
-        {
-            if (msgbuf[i] == '\n')
-            {
-                msgbuf[i] = ' ';
-            }
-        }
-
-        message = CFStringCreateWithCString(NULL, msgbuf,
-                                            kCFStringEncodingUTF8);
-
-        CFUserNotificationDisplayNotice(0,
-                                        kCFUserNotificationCautionAlertLevel,
-                                        NULL,
-                                        NULL,
-                                        NULL,
-                                        CFSTR(PACKAGE_STRING),
-                                        message,
-                                        NULL);
-    }
-#elif defined(__DJGPP__)
-    {
-        mre_printf("%s\n", msgbuf);
-        exit(-1);
-    }
-
-#else
-    {
-        ZenityErrorBox(msgbuf);
-    }
-#endif
+//#ifdef _WIN32
+//    {
+//        wchar_t wmsgbuf[512];
+//
+//        MultiByteToWideChar(CP_ACP, 0,
+//                            msgbuf, strlen(msgbuf) + 1,
+//                            wmsgbuf, sizeof(wmsgbuf));
+//
+//        MessageBoxW(NULL, wmsgbuf, L"", MB_OK);
+//    }
+//#elif defined(__MACOSX__)
+//    {
+//        CFStringRef message;
+//	int i;
+//
+//	// The CoreFoundation message box wraps text lines, so replace
+//	// newline characters with spaces so that multiline messages
+//	// are continuous.
+//
+//	for (i = 0; msgbuf[i] != '\0'; ++i)
+//        {
+//            if (msgbuf[i] == '\n')
+//            {
+//                msgbuf[i] = ' ';
+//            }
+//        }
+//
+//        message = CFStringCreateWithCString(NULL, msgbuf,
+//                                            kCFStringEncodingUTF8);
+//
+//        CFUserNotificationDisplayNotice(0,
+//                                        kCFUserNotificationCautionAlertLevel,
+//                                        NULL,
+//                                        NULL,
+//                                        NULL,
+//                                        CFSTR(PACKAGE_STRING),
+//                                        message,
+//                                        NULL);
+//    }
+//#elif defined(__DJGPP__)
+//    {
+//        mre_printf("%s\n", msgbuf);
+//        exit(-1);
+//    }
+//
+//#else
+//    {
+//        ZenityErrorBox(msgbuf);
+//    }
+//#endif
 
     // abort();
 #if ORIGCODE
