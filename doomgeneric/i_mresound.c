@@ -42,7 +42,7 @@
 
 #include <mixer.h>
 
-#define LOW_PASS_FILTER 0
+//#define LOW_PASS_FILTER 0
 //#define DEBUG_DUMP_WAVS
 #define NUM_CHANNELS 16
 
@@ -882,7 +882,8 @@ static void I_MRE_UpdateSound(void)
 {
 	int i;
 
-	mixer_update();
+	//mixer_update();
+	bitstream_resume();
 
 	// Check all channels to see if a sound has finished
 

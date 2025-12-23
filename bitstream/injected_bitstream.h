@@ -61,6 +61,11 @@ typedef enum {
 	PCM_CHANNEL_SUB
 } PCM_Channel;
 
+typedef enum {
+	PCM_FREE_SPACE_MODE,
+	PCM_DATA_COMSUME_MODE
+} PCM_Buffer_Mode;
+
 typedef struct PCM PCM;
 
 struct PCM {
@@ -104,6 +109,10 @@ struct PCM {
 	PCM_Status (*Resume)(PCM* hdl);
 	PCM_Event (*Process)(PCM* hdl, PCM_Event event);
 	PCM_Status (*Close)(PCM* hdl);
+
+	VMUINT8 unknown2[16];
+
+	void (*SetDataRequestThreshold)(PCM* hdl, PCM_Buffer_Mode mode, VMUINT32 threshold, void* param);
 };
 
 typedef struct {
@@ -119,7 +128,8 @@ typedef void (*PCM_handle_t)(PCM* handle, PCM_Event event);
 int injected_bitstream_init(PCM_Param* pcmParam, PCM_handle_t handle);
 void injected_bitstream_deinit();
 void injected_bitstream_put_buffer(VMUINT8* buf, VMUINT32 buf_size, VMUINT32* written);
-void injected_bitstream_start();
+void injected_bitstream_start(VMUINT start_time);
+void injected_bitstream_resume();
 VMINT injected_bitstream_get_buffer_size();
 VMINT injected_bitstream_get_free_buffer_size();
 

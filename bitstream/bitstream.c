@@ -12,9 +12,50 @@ static int mre_bitstream_alloved = -1;
 static int mre_bitstream_handle = -1;
 static int mre_bitstream_buffer_size = -1;
 static int mre_bitstream_sample_rate = -1;
+static bitstream_callback mre_bitstream_callback = 0;
 
-void mre_bitstream_callback(VMINT handle, VMINT result) {}
-void injected_bitstream_callback(PCM* handle, PCM_Event event) {}
+static void mre_vm_bitstream_callback(VMINT handle, VMINT result) {
+	enum bitstream_events event;
+
+	switch (result) {
+	case VM_BITSTREAM_EVENT_DATA_REQUEST:
+		event = BITSTREAM_EVENT_DATA_REQUEST;
+		break;
+	case VM_BITSTREAM_EVENT_ERROR:
+		event = BITSTREAM_EVENT_ERROR;
+		break;
+	case VM_BITSTREAM_EVENT_NONE:
+	default:
+		event = BITSTREAM_EVENT_NONE;
+		break;
+	}
+
+	if (mre_bitstream_callback)
+		mre_bitstream_callback(event);
+}
+
+static void injected_bitstream_callback(PCM* handle, PCM_Event pcm_event) {
+	enum bitstream_events event;
+
+	switch (pcm_event) {
+	case PCM_DATA_REQUEST:
+		event = BITSTREAM_EVENT_DATA_REQUEST;
+		break;
+	case PCM_BUFFER_UNDERFLOW:
+		event = BITSTREAM_EVENT_BUFFER_UNDERFLOW;
+		//mre_printf("bitstream_handle: %d\n", pcm_event);
+		break;
+	case PCM_ERROR:
+		event = BITSTREAM_EVENT_ERROR;
+		break;
+	default:
+		event = BITSTREAM_EVENT_NONE;
+		break;
+	}
+
+	if (mre_bitstream_callback)
+		mre_bitstream_callback(event);
+}
 
 static VMINT bitstream_sample_rate_enum_to_int(vm_bitstream_sample_freq_enum sampleFreq) {
 	if ((VMUINT)sampleFreq >= VM_BITSTREAM_SAMPLE_FREQ_TOTAL)
@@ -23,13 +64,15 @@ static VMINT bitstream_sample_rate_enum_to_int(vm_bitstream_sample_freq_enum sam
 		return sample_rate_enum_to_int[sampleFreq];
 }
 
-VMINT bitstream_open(VMBOOL isStereo, VMUINT8 bitPerSample, vm_bitstream_sample_freq_enum sampleFreq) {
+VMINT bitstream_open(VMBOOL isStereo, VMUINT8 bitPerSample, vm_bitstream_sample_freq_enum sampleFreq, bitstream_callback callback) {
 	if (mre_bitstream_alloved == -1)
 		mre_bitstream_alloved = (vm_get_sym_entry("vm_bitstream_audio_open_pcm") != 0);
 
 	mre_bitstream_buffer_size = -1;
 
 	mre_bitstream_sample_rate = bitstream_sample_rate_enum_to_int(sampleFreq);
+
+	mre_bitstream_callback = callback;
 
 	if (mre_bitstream_alloved)
 	{
@@ -42,7 +85,7 @@ VMINT bitstream_open(VMBOOL isStereo, VMUINT8 bitPerSample, vm_bitstream_sample_
 		settings.bitPerSample = bitPerSample;
 		settings.sampleFreq = sampleFreq;
 
-		return vm_bitstream_audio_open_pcm(&mre_bitstream_handle, &settings, mre_bitstream_callback);
+		return vm_bitstream_audio_open_pcm(&mre_bitstream_handle, &settings, mre_vm_bitstream_callback);
 	}
 	else
 	{
@@ -132,7 +175,18 @@ VMINT bitstream_start(VMUINT start_time, VMUINT8 audio_path, VMINT volume) {
 	else
 	{
 		vm_set_volume(volume);
-		injected_bitstream_start();
+		injected_bitstream_start(start_time);
+	}
+}
+
+VMINT bitstream_resume() {
+	if (mre_bitstream_alloved)
+	{
+		// todo
+	}
+	else
+	{
+		injected_bitstream_resume();
 	}
 
 }

@@ -7,7 +7,7 @@ static PCM_Open_t PCM_Open = 0x00000000;
 static PCM* pcm = 0;
 static VMUINT8* ring_buf = 0;
 
-const int RING_BUFFER_SIZE = 4 * 1024;
+const int RING_BUFFER_SIZE = 3 * 1024;
 
 // Scaning phone firmare for PCM_Open entry point by magic value. Warning: May cause fatal error (reboot) after activation
 static void injector() {
@@ -54,6 +54,9 @@ int injected_bitstream_init(PCM_Param* pcmParam, PCM_handle_t handle) {
     }
 
     pcm->SetBuffer(pcm, ring_buf, RING_BUFFER_SIZE);
+
+    //pcm->SetDataRequestThreshold(pcm, PCM_DATA_COMSUME_MODE, 2048, 0);
+    //pcm->SetDataRequestThreshold(pcm, PCM_FREE_SPACE_MODE, 2048, 0);
 
     return 0;
 }
@@ -110,12 +113,20 @@ void injected_bitstream_put_buffer(VMUINT8* buf, VMUINT32 buf_size, VMUINT32* wr
     if (written)
         *(written) = used_len;
 
-    pcm->Play(pcm);
+    pcm->FinishWriteData(pcm);
+
+    pcm->Resume(pcm);
 }
 
-void injected_bitstream_start() {
+void injected_bitstream_start(VMUINT start_time) {
     if (!pcm) return;
-   //pcm->Play(pcm); 
+    pcm->SetStartTime(pcm, start_time);
+    pcm->Play(pcm); 
+}
+
+void injected_bitstream_resume() {
+    if (!pcm) return;
+    pcm->Resume(pcm);
 }
 
 VMINT injected_bitstream_get_buffer_size() {
@@ -125,10 +136,5 @@ VMINT injected_bitstream_get_buffer_size() {
 VMINT injected_bitstream_get_free_buffer_size() {
     if (!pcm) return 0;
 
-    //VMUINT8* pcm_buf = 0;
-    //VMUINT32 pcm_bufsize = 0;
-
-   // pcm->GetWriteBuffer(pcm, &pcm_buf, &pcm_bufsize);
-
-    return pcm->GetFreeSpace(pcm);//pcm_bufsize;
+    return pcm->GetFreeSpace(pcm);
 }
