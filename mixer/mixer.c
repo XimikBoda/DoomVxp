@@ -92,7 +92,7 @@ static void mix(short buf_a[], short buf_b[], int samples, VMUINT8 left, VMUINT8
 	}
 }
 
-static short buf_samples[8*1024];
+static short buf_samples[2 * 1024];
 void mixer_update() {
 	int free_buf_size = bitstream_get_free_buffer_size();
 
