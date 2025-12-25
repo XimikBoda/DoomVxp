@@ -73,7 +73,7 @@ void injected_bitstream_deinit() {
     }
 }
 
-void injected_bitstream_put_buffer(VMUINT8* buf, VMUINT32 buf_size, VMUINT32* written) {
+void injected_bitstream_put_buffer(VMUINT8* buf, VMUINT buf_size, VMUINT* written) {
     VMUINT8* pcm_buf = 0;
     VMUINT32 pcm_bufsize = 0;
     VMUINT32 used_len = 0;
